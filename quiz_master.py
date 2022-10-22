@@ -106,3 +106,6 @@ def quiz():
             print("Incorrect.. Correct answer is :", ques[6])
     print("Quiz has ended !! Your final score is :", score)
     input("Press any key to continue")
+
+if __name__== "__main__":
+    home()
