@@ -44,7 +44,7 @@ def factorial(n):
 
 # password_generator
 
-def passwordgenerator():
+def passwordgenerator(passlen=8):
     """This is normal password generator which help to generate password.
     Digits, special letters, uppercase, lowercase letters are use to generate
     password."""
@@ -52,15 +52,18 @@ def passwordgenerator():
     s1 = string.ascii_letters
     s2 = string.digits
     s3 = string.punctuation
-
-    passlen = int(input("\nEnter password length :"))
     # print(s3)
     s = []
     s.extend(list(s1))
     s.extend(list(s2))
     s.extend(list(s3))
+    return ("".join(random.sample(s, passlen)))
 
-    # print(s)
-    print("Creating password....")
-    print("Here is your password :")
-    print("".join(random.sample(s, passlen)))
+def intotxtfile(question ,text):
+    with open("output.txt", 'a') as f:
+        f.write("\n\nQuestion: "+question+"\n")
+        f.write("Answer: ")
+        for i in text:
+            f.write(i)
+if __name__=="__main__":
+    passwordgenerator()

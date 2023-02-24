@@ -2,8 +2,7 @@ import sys  # Not in use know not imported in main.py
 import mysql.connector
 import random
 
-mydb = mysql.connector.connect(host="localhost", user="root",
-                               passwd="loky", database="quiz")
+mydb = mysql.connector.connect(host="localhost", user="root", passwd="loky", database="quiz")
 mycursor = mydb.cursor()
 
 
