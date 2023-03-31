@@ -2,7 +2,7 @@ import openai
 
 class Chatgpt:
     def __init__(self) -> None:
-        openai.api_key = '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'
+        openai.api_key = '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'
 
     def write_code(self, prompt_text):
         response = openai.Completion.create(

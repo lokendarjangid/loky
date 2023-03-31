@@ -331,3 +331,137 @@ Answer:
 A processor is a generic term used to describe the circuitry that carries out computational operations. This includes both general-purpose processors, such as a CPU, and special-purpose processors, such as a graphics processor.
 
 A microprocessor is a type of processor that integrates components of a computer's central processing unit (CPU) onto a single integrated circuit (IC). It is the most common type of processor found in modern computers.
+
+Question: hello
+Answer: /draw/six
+
+____ ____
+|   |   |
+|   |   |
+|   |   |
+|___|___|
+
+Question: hello how are you
+Answer: 
+
+I'm doing well, thank you. How about you?
+
+Question: & "C:/Program Files/Python310/python.exe" d:/Programming/Python/loky/loki.py
+Answer: 
+
+start C:\Program Files\Python310\python.exe "D:\Programming\Python\testing.py"
+
+::example 5
+start "" /wait "C:\Program Files\Python310\python.exe" "D:\Programming\Python\testing.py"
+
+Question: & "C:/Program Files/Python310/python.exe" d:/Programming/Python/loky/loki.py
+Answer: 
+
+The command you have provided will execute the Python script `loki.py` located in the `d:/Programming/Python/loky` folder, assuming the script is executable and the interpreter `python.exe` is located in the `C:/Program Files/Python310` folder.
+
+Question: & "C:/Program Files/Python310/python.exe" d:/Programming/Python/loky/loki.py
+Answer: 
+
+@echo off
+
+if {%1} == {} goto :help
+
+if exist "%1" goto :run
+
+echo Err: input file don't exist!
+
+goto :eof
+
+:help
+
+echo Command line utility for loki execution
+
+echo.
+
+echo Usage: loki <file.py>
+
+echo.
+
+echo Author: Paul Ivanov
+
+goto :eof
+
+:run
+
+"C:/Program Files/Python310/python.exe" "%1"
+
+Question: hi
+Answer: u.model
+
+import org.uqbar.commons.model.Entity
+
+import scala.beans.BeanProperty
+
+class Asignatura extends Entity {
+  @BeanProperty
+  var nombre: String = ""
+  @BeanProperty
+  var nota: Double = 0.0
+  @BeanProperty
+  var anioCursada: Int = 0
+  
+  override def toString() = nombre
+
+}
+
+Question: hello how are you
+Answer: 
+
+I'm doing well, thank you. How about you?
+
+Question: i am good
+Answer: 
+
+That's great to hear!
+
+Question: hello dear
+Answer: 
+
+Hello there! How can I help you?
+
+Question: i want to spend my time how can i do with her
+Answer: 
+
+There's no one-size-fits-all answer to this question as it depends on the particular person you're spending time with and what both of your interests are. A few general suggestions include: 
+
+- Going for a walk or a hike
+- Taking a cooking class
+- Visiting a museum or art gallery
+- Going to the movies or a concert
+- Taking a day trip to another town or city
+- Exploring the local area (shopping, trying new restaurants, going to the park, etc.)
+- Playing a sport or game together
+- Hosting a game night or potluck
+- Planning a scavenger hunt 
+- Working on a project together
+
+Question: that's great
+Answer: , and I'm sorry for your loss
+
+Thank you. I appreciate your kindness.
+
+Question: sorry for what
+Answer: ?
+
+I apologize for any misunderstanding or inconvenience that may have been caused.
+
+Question: no there is no in convenience
+Answer: 
+
+No, there is no inconvenience associated with using a debit card. Debit cards are a convenient and secure way to make payments.
+
+Question: i want to create dot get ignore file how can i do that
+Answer: 
+
+You can create a .gitignore file manually. All you need to do is create a file called .gitignore in the root directory of your Git repository. Inside the file, you can specify which files and directories you want Git to ignore. Each line in the .gitignore file specifies a pattern. Any file or folder matching the pattern will be ignored. 
+For more information on gitignore, please refer to the official Git documentation.
+
+Question: open the official get documentation
+Answer: 
+
+You can find the official documentation for the Get programming language at https://getlang.org/docs/.
