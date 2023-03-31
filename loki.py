@@ -1,5 +1,5 @@
 import re
-import normal_maths
+import s_functions
 import chatgpt
 import voice_work
 import wikipedia  # pip install wikipedia
@@ -62,7 +62,7 @@ def commands(command_user):
         except AttributeError:
             length = 8
 
-        password = normal_maths.passwordgenerator(int(length))
+        password = s_functions.passwordgenerator(int(length))
         return (f"Your password is {str(password)}")
 
     elif 'bye' in command_user or 'stop' in command_user or 'exit' in command_user:
@@ -98,7 +98,7 @@ def commands(command_user):
 
         for choice in response['choices']:
             voice_p.printandspeak(choice['text'])
-            normal_maths.intotxtfile(prompt_text, choice['text'])
+            # s_functions.intotxtfile(prompt_text, choice['text'])
             if choice['text'].find('?') != -1:
                 commander()
             else:

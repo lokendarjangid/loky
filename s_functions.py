@@ -65,5 +65,3 @@ def intotxtfile(question ,text):
         f.write("Answer: ")
         for i in text:
             f.write(i)
-if __name__=="__main__":
-    passwordgenerator()
