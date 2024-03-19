@@ -1,10 +1,16 @@
 import pyttsx3
 import datetime
 import speech_recognition as sr 
+import platform
 
 class voice:
     def __init__(self) -> None:
-        self.engine = pyttsx3.init('sapi5')
+        if platform.system() == 'Linux':
+            self.engine = pyttsx3.init('nsss')
+        elif platform.system() == 'Windows':
+            self.engine = pyttsx3.init('sapi5')
+        else:
+            raise Exception("Unsupported platform")
         voices = self.engine.getProperty('voices')
         # print(voices[3].id)
         self.engine.setProperty('voice', voices[0].id)

@@ -1,3 +1,4 @@
+from inspect import _void
 import re
 import s_functions
 import chatgpt
@@ -8,10 +9,53 @@ import os
 import datetime
 import requests
 import random
+# import pywhatkit
+import BeautifulSoup
+
+
 
 voice_p = voice_work.voice()
 chat = chatgpt.Chatgpt()
 
+#other functions
+
+def searchGoogle(query):
+    if "google" in query:
+        import wikipedia as googleScrap
+        query = query.replace("jarvis","")
+        query = query.replace("google search","")
+        query = query.replace("google","")
+        voice_p.speak("This is what I found on google")
+
+        try:
+            # pywhatkit.search(query)
+            result = googleScrap.summary(query,1)
+            voice_p.speak(result)
+
+        except:
+            voice_p.speak("No speakable output available")
+
+def searchYoutube(query):
+    if "youtube" in query:
+        voice_p.speak("This is what I found for your search!") 
+        query = query.replace("youtube search","")
+        query = query.replace("youtube","")
+        query = query.replace("jarvis","")
+        web  = "https://www.youtube.com/results?search_query=" + query
+        webbrowser.open(web)
+        # pywhatkit.playonyt(query)
+        voice_p.speak("Done, Sir")
+
+def searchWikipedia(query):
+    if "wikipedia" in query:
+        voice_p.speak("Searching from wikipedia....")
+        query = query.replace("wikipedia","")
+        query = query.replace("search wikipedia","")
+        query = query.replace("jarvis","")
+        results = wikipedia.summary(query,sentences = 2)
+        voice_p.speak("According to wikipedia..")
+        print(results)
+        voice_p.speak(results)
 
 def commands(command_user):
     prompt_text = str(command_user)
@@ -68,42 +112,66 @@ def commands(command_user):
     elif 'bye' in command_user or 'stop' in command_user or 'exit' in command_user:
         voice_p.printandspeak("Bye Sir, have a good day.")
         exit()
+        
+    elif "google" in command_user:
+        searchGoogle(command_user)
+        
+    elif "youtube" in command_user:
+        searchYoutube(command_user)
+        
+    elif "wikipedia" in command_user:
+        searchWikipedia(command_user)
+        
+    elif "temperature" in command_user:
+        search = "temperature in delhi"
+        url = f"https://www.google.com/search?q={search}"
+        r  = requests.get(url)
+        data = BeautifulSoup(r.text,"html.parser")
+        temp = data.find("div", class_ = "BNeawe").text
+        voice_p.speak(f"current{search} is {temp}")
+    elif "weather" in query:
+        search = "temperature in delhi"
+        url = f"https://www.google.com/search?q={search}"
+        r  = requests.get(url)
+        data = BeautifulSoup(r.text,"html.parser")
+        temp = data.find("div", class_ = "BNeawe").text
+        voice_p.speak(f"current{search} is {temp}")
+    # elif 'generate image' in command_user:
 
-    elif 'generate image' in command_user:
+    #     response = chat.generate_image(prompt_text=prompt_text)
+    #     for image in response['data']:
+    #         # print(image['url'])
+    #         img_data = requests.get(image['url']).content
+    #         command_user = command_user.replace("generate image", "")
+    #         if 'of' in command_user:
+    #             command_user = command_user.replace("of", "")
+    #         # os.chdir('images')1
+    #         os.chdir("images")
+    #         fname = os.path.join(os.getcwd(), str(command_user)+'.jpg')
+    #         with open(fname, 'wb') as handler:
+    #             handler.write(img_data)
+    #         os.chdir("..")
+    #         return "Image generated"
 
-        response = chat.generate_image(prompt_text=prompt_text)
-        for image in response['data']:
-            # print(image['url'])
-            img_data = requests.get(image['url']).content
-            command_user = command_user.replace("generate image", "")
-            if 'of' in command_user:
-                command_user = command_user.replace("of", "")
-            # os.chdir('images')1
-            os.chdir("images")
-            fname = os.path.join(os.getcwd(), str(command_user)+'.jpg')
-            with open(fname, 'wb') as handler:
-                handler.write(img_data)
-            os.chdir("..")
-            return "Image generated"
+    # elif 'write code' in command_user or 'write a code' in command_user or 'write program' in command_user:
+    #     response = chat.write_code(prompt_text=prompt_text)
 
-    elif 'write code' in command_user or 'write a code' in command_user or 'write program' in command_user:
-        response = chat.write_code(prompt_text=prompt_text)
+    #     for choice in response['choices']:
+    #         print(choice['text'])
+    #         return"Here is code"
 
-        for choice in response['choices']:
-            print(choice['text'])
-            return"Here is code"
+    # else:
+    #     response = chat.text_out(prompt_text=prompt_text)
 
-    else:
-        response = chat.text_out(prompt_text=prompt_text)
-
-        for choice in response['choices']:
-            voice_p.printandspeak(choice['text'])
-            # s_functions.intotxtfile(prompt_text, choice['text'])
-            if choice['text'].find('?') != -1:
-                commander()
-            else:
-                pass
-
+    #     for choice in response['choices']:
+    #         voice_p.printandspeak(choice['text'])
+    #         # s_functions.intotxtfile(prompt_text, choice['text'])
+    #         if choice['text'].find('?') != -1:
+    #             commander()
+    #         else:
+    #             pass
+    else :
+        voice_p.printandspeak("command not found")
 
 def commander():
     command_user = voice_p.takeCommand().lower()
