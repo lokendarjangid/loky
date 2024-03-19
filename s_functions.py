@@ -1,47 +1,48 @@
-
 import random
-
-
-# normal maths
 import string
+import voice_work
+import pywhatkit
+import webbrowser
+import wikipedia
 
+voice_p = voice_work.voice()
+def searchGoogle(query):
+    if "google" in query:
+        import wikipedia as googleScrap
+        query = query.replace("jarvis","")
+        query = query.replace("google search","")
+        query = query.replace("google","")
+        voice_p.speak("This is what I found on google")
 
-def addition(a, b):
-    c = a + b
-    return c
+        try:
+            pywhatkit.search(query)
+            result = googleScrap.summary(query,1)
+            voice_p.speak(result)
 
+        except:
+            voice_p.speak("No speakable output available")
 
-def subtract(a, b):
-    c = a - b
-    return c
+def searchYoutube(query):
+    if "youtube" in query:
+        voice_p.speak("This is what I found for your search!") 
+        query = query.replace("youtube search","")
+        query = query.replace("youtube","")
+        query = query.replace("jarvis","")
+        web  = "https://www.youtube.com/results?search_query=" + query
+        webbrowser.open(web)
+        pywhatkit.playonyt(query)
+        voice_p.speak("Done, Sir")
 
-
-def area_of_circle(radius):
-    """This function will calculate area of circle . when you enter radius .
-    This function will calculate automatically area of circle and give you answer."""
-
-    area = 3.14159 * radius * radius
-    return area
-
-
-def perimeter_of_circle(radius):
-    """This function will calculate perimeter of circle . when you enter radius .
-    This function will calculate automatically perimeter of circle and give you answer."""
-
-    perimeter = 2 * 3.14159 * radius
-    return perimeter
-
-
-def factorial(n):
-    """This function is used to calculate factorial for you. In class 11 and 12 this operation used .
-    This function is very useful for students. symbol used in maths for this function is !."""
-
-    a = 1
-    b = 1
-    while a <= n:
-        b *= n
-        n -= 1
-    return b
+def searchWikipedia(query):
+    if "wikipedia" in query:
+        voice_p.speak("Searching from wikipedia....")
+        query = query.replace("wikipedia","")
+        query = query.replace("search wikipedia","")
+        query = query.replace("jarvis","")
+        results = wikipedia.summary(query,sentences = 2)
+        voice_p.speak("According to wikipedia..")
+        print(results)
+        voice_p.speak(results)
 
 # password_generator
 

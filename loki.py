@@ -1,73 +1,39 @@
-from inspect import _void
 import re
-import s_functions
-import chatgpt
+import s_functions as sf
 import voice_work
-import wikipedia  # pip install wikipedia
 import webbrowser
 import os
+from keyboard import volumeup,volumedown
 import datetime
 import requests
-import random
-# import pywhatkit
-import BeautifulSoup
+import mixer
+from NewsRead import latestnews
+import pyautogui
+import speedtest
+from Dictapp import openappweb, closeappweb
+from bs4 import BeautifulSoup
 
+for i in range(3):
+    a = input("Enter Password to open Jarvis :- ")
+    pw_file = open("password.txt","r")
+    pw = pw_file.read()
+    pw_file.close()
+    if (a==pw):
+        print("WELCOME SIR ! PLZ SPEAK [WAKE UP] TO LOAD ME UP")
+        break
+    elif (i==2 and a!=pw):
+        exit()
 
+    elif (a!=pw):
+        print("Try Again")
 
 voice_p = voice_work.voice()
-chat = chatgpt.Chatgpt()
-
-#other functions
-
-def searchGoogle(query):
-    if "google" in query:
-        import wikipedia as googleScrap
-        query = query.replace("jarvis","")
-        query = query.replace("google search","")
-        query = query.replace("google","")
-        voice_p.speak("This is what I found on google")
-
-        try:
-            # pywhatkit.search(query)
-            result = googleScrap.summary(query,1)
-            voice_p.speak(result)
-
-        except:
-            voice_p.speak("No speakable output available")
-
-def searchYoutube(query):
-    if "youtube" in query:
-        voice_p.speak("This is what I found for your search!") 
-        query = query.replace("youtube search","")
-        query = query.replace("youtube","")
-        query = query.replace("jarvis","")
-        web  = "https://www.youtube.com/results?search_query=" + query
-        webbrowser.open(web)
-        # pywhatkit.playonyt(query)
-        voice_p.speak("Done, Sir")
-
-def searchWikipedia(query):
-    if "wikipedia" in query:
-        voice_p.speak("Searching from wikipedia....")
-        query = query.replace("wikipedia","")
-        query = query.replace("search wikipedia","")
-        query = query.replace("jarvis","")
-        results = wikipedia.summary(query,sentences = 2)
-        voice_p.speak("According to wikipedia..")
-        print(results)
-        voice_p.speak(results)
 
 def commands(command_user):
     prompt_text = str(command_user)
-    # Logic for executing tasks based on command_user
-    if 'wikipedia' in command_user:
-        voice_p.speak('Searching Wikipedia...')
-        command_user = command_user.replace("wikipedia", "")
-        results = wikipedia.summary(command_user, sentences=2)
-        voice_p.speak("According to Wikipedia")
-        return results
 
-    elif 'open youtube' in command_user:
+    # open commands
+    if 'open youtube' in command_user:
         webbrowser.open("youtube.com")
 
     elif 'open google' in command_user:
@@ -84,21 +50,87 @@ def commands(command_user):
 
     elif 'open whatsapp' in command_user:
         webbrowser.open("whatsapp.com")
+    
+    elif "open" in command_user:
+        openappweb(command_user)
 
-    elif 'play music' in command_user:
-        music_dir = 'C:\\Users\\Lenovo\\Music'
-        songs = os.listdir(music_dir)
-        # print(songs)
-        os.startfile(os.path.join(music_dir, songs[random.randint(0, len(songs))]))
+    elif "close" in command_user:
+        closeappweb(command_user)   
+
+    # search commands
+    elif "google" in command_user:
+        sf.searchGoogle(command_user)
+        
+    elif "youtube" in command_user:
+        sf.searchYoutube(command_user)
+        
+    elif "wikipedia" in command_user:
+        sf.searchWikipedia(command_user)
+
+    # set alarm 
+    elif "set an alarm" in command_user:
+        print("input time example:- 10 and 10 and 10")
+        voice_p.speak("Set the time")
+        a = input("Please tell the time :- ")
+        alarm(a)
+        voice_p.speak("Done,sir")
+
+    # play,pause,mute,volume increase and decrease youtube
+    elif "pause" in command_user:
+        pyautogui.press("k")
+        voice_p.speak("video paused")
+
+    elif "play" in command_user:
+        pyautogui.press("k")
+        voice_p.speak("video played")
+
+    elif "mute" in command_user:
+        pyautogui.press("m")
+        voice_p.speak("video muted")
+
+    elif "volume up" in command_user:
+        voice_p.speak("Turning volume up,sir")
+        volumeup()
+
+    elif "volume down" in command_user:
+        voice_p.speak("Turning volume down, sir")
+        volumedown()
+
+    # reminder of anything
+    elif "remember that" in command_user:
+        rememberMessage = command_user.replace("remember that","")
+        rememberMessage = command_user.replace("jarvis","")
+        voice_p.speak("You told me to remember that"+rememberMessage)
+        remember = open("Remember.txt","a")
+        remember.write(rememberMessage)
+        remember.close()
+
+    elif "what do you remember" in command_user:
+        remember = open("Remember.txt","r")
+        voice_p.speak("You told me to remember that" + remember.read())
+
+    # read new 
+    elif "news" in command_user:
+        latestnews()
+    
+    # calculator
+    elif "calculate" in command_user:
+        from Calculatenumbers import WolfRamAlpha
+        from Calculatenumbers import Calc
+        command_user = command_user.replace("calculate","")
+        command_user = command_user.replace("jarvis","")
+        Calc(command_user)
+    
+    # send whatsapp message to anyone
+    elif "whatsapp" in command_user:
+        from Whatsapp import sendMessage
+        sendMessage()
 
     elif 'the time' in command_user:
         strTime = datetime.datetime.now().strftime("%H:%M:%S")
         return (f"Sir, the time is {strTime}")
 
-    elif 'open code' in command_user:
-        codePath = "C:\\Users\\Lenovo\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
-        os.startfile(codePath)
-
+    # genereate random passoword for privacy
     elif 'random password' in command_user:
         try:
             length = int(re.search(r'\d+', command_user).group())
@@ -106,70 +138,143 @@ def commands(command_user):
         except AttributeError:
             length = 8
 
-        password = s_functions.passwordgenerator(int(length))
+        password = sf.passwordgenerator(int(length))
         return (f"Your password is {str(password)}")
+    
+    # give tempature of jaipur
+    elif "temperature" in command_user:
+        search = "temperature in jaipur"
+        url = f"https://www.google.com/search?q={search}"
+        r  = requests.get(url)
+        data = BeautifulSoup(r.text,"html.parser")
+        temp = data.find("div", class_ = "BNeawe").text
+        voice_p.speak(f"current{search} is {temp}")
 
+    elif "weather" in command_user:
+        search = "temperature in jaipur"
+        url = f"https://www.google.com/search?q={search}"
+        r  = requests.get(url)
+        data = BeautifulSoup(r.text,"html.parser")
+        temp = data.find("div", class_ = "BNeawe").text
+        voice_p.speak(f"current{search} is {temp}")
+    
+    # shutdown the system
+    elif "shutdown the system" in command_user:
+        voice_p.speak("Are You sure you want to shutdown")
+        shutdown = input("Do you wish to shutdown your computer? (yes/no)")
+        if shutdown == "yes":
+            os.system("shutdown /s /t 1")
+        elif shutdown == "no":
+            pass
+    
+    # schedule the day
+    elif "schedule my day" in command_user:
+        tasks = [] #Empty list 
+        voice_p.speak("Do you want to clear old tasks (Plz speak YES or NO)")
+        command_user = voice_p.takeCommand().lower()
+        if "yes" in command_user:
+            file = open("tasks.txt","w")
+            file.write(f"")
+            file.close()
+            no_tasks = int(input("Enter the no. of tasks :- "))
+            i = 0
+            for i in range(no_tasks):
+                tasks.append(input("Enter the task :- "))
+                file = open("tasks.txt","a")
+                file.write(f"{i}. {tasks[i]}\n")
+                file.close()
+        elif "no" in command_user:
+            i = 0
+            no_tasks = int(input("Enter the no. of tasks :- "))
+            for i in range(no_tasks):
+                tasks.append(input("Enter the task :- "))
+                file = open("tasks.txt","a")
+                file.write(f"{i}. {tasks[i]}\n")
+                file.close()
+    
+    elif "show my schedule" in command_user:
+        file = open("tasks.txt","r")
+        content = file.read()
+        file.close()
+        mixer.init()
+        mixer.music.load("notification.mp3")    
+        mixer.music.play()
+        notification.notify(
+            title = "My schedule :-",
+            message = content,
+            timeout = 15
+            )
+
+    #  open any app function
+    elif "open" in command_user:   #EASY METHOD
+        command_user = command_user.replace("open","")
+        command_user = command_user.replace("jarvis","")
+        pyautogui.press("super")
+        pyautogui.typewrite(command_user)
+        pyautogui.sleep(2)
+        pyautogui.press("enter")   
+    
+    # Internet speed test
+    elif "internet speed" in command_user:
+        wifi  = speedtest.Speedtest()
+        upload_net = wifi.upload()/1048576         #Megabyte = 1024*1024 Bytes
+        download_net = wifi.download()/1048576
+        print("Wifi Upload Speed is", upload_net)
+        print("Wifi download speed is ",download_net)
+        voice_p.speak(f"Wifi download speed is {download_net}")
+        voice_p.speak(f"Wifi Upload speed is {upload_net}")
+    
+    # IPL score
+    elif "ipl score" in command_user:
+        from plyer import notification  #pip install plyer
+        url = "https://www.cricbuzz.com/"
+        page = requests.get(url)
+        soup = BeautifulSoup(page.text,"html.parser")
+        team1 = soup.find_all(class_ = "cb-ovr-flo cb-hmscg-tm-nm")[0].get_text()
+        team2 = soup.find_all(class_ = "cb-ovr-flo cb-hmscg-tm-nm")[1].get_text()
+        team1_score = soup.find_all(class_ = "cb-ovr-flo")[8].get_text()
+        team2_score = soup.find_all(class_ = "cb-ovr-flo")[10].get_text()
+
+        a = print(f"{team1} : {team1_score}")
+        b = print(f"{team2} : {team2_score}")
+
+        notification.notify(
+            title = "IPL SCORE :- ",
+            message = f"{team1} : {team1_score}\n {team2} : {team2_score}",
+            timeout = 15
+        )
+    
+    # game rock paper scissor
+    elif "play a game" in command_user:
+        from game import game_play
+        game_play()
+
+    # take screenshot
+    elif "screenshot" in command_user:
+        im = pyautogui.screenshot()
+        im.save("ss.jpg")
+    
+    # click my picture
+    elif "click my photo" in command_user:
+        pyautogui.press("super")
+        pyautogui.typewrite("camera")
+        pyautogui.press("enter")
+        pyautogui.sleep(2)
+        voice_p.speak("SMILE")
+        pyautogui.press("enter")
+
+    # translator function
+    elif "translate" in command_user:
+        from Translator import translategl
+        command_user = command_user.replace("jarvis","")
+        command_user = command_user.replace("translate","")
+        translategl(command_user)
+
+    # exit the program
     elif 'bye' in command_user or 'stop' in command_user or 'exit' in command_user:
         voice_p.printandspeak("Bye Sir, have a good day.")
         exit()
-        
-    elif "google" in command_user:
-        searchGoogle(command_user)
-        
-    elif "youtube" in command_user:
-        searchYoutube(command_user)
-        
-    elif "wikipedia" in command_user:
-        searchWikipedia(command_user)
-        
-    elif "temperature" in command_user:
-        search = "temperature in delhi"
-        url = f"https://www.google.com/search?q={search}"
-        r  = requests.get(url)
-        data = BeautifulSoup(r.text,"html.parser")
-        temp = data.find("div", class_ = "BNeawe").text
-        voice_p.speak(f"current{search} is {temp}")
-    elif "weather" in query:
-        search = "temperature in delhi"
-        url = f"https://www.google.com/search?q={search}"
-        r  = requests.get(url)
-        data = BeautifulSoup(r.text,"html.parser")
-        temp = data.find("div", class_ = "BNeawe").text
-        voice_p.speak(f"current{search} is {temp}")
-    # elif 'generate image' in command_user:
 
-    #     response = chat.generate_image(prompt_text=prompt_text)
-    #     for image in response['data']:
-    #         # print(image['url'])
-    #         img_data = requests.get(image['url']).content
-    #         command_user = command_user.replace("generate image", "")
-    #         if 'of' in command_user:
-    #             command_user = command_user.replace("of", "")
-    #         # os.chdir('images')1
-    #         os.chdir("images")
-    #         fname = os.path.join(os.getcwd(), str(command_user)+'.jpg')
-    #         with open(fname, 'wb') as handler:
-    #             handler.write(img_data)
-    #         os.chdir("..")
-    #         return "Image generated"
-
-    # elif 'write code' in command_user or 'write a code' in command_user or 'write program' in command_user:
-    #     response = chat.write_code(prompt_text=prompt_text)
-
-    #     for choice in response['choices']:
-    #         print(choice['text'])
-    #         return"Here is code"
-
-    # else:
-    #     response = chat.text_out(prompt_text=prompt_text)
-
-    #     for choice in response['choices']:
-    #         voice_p.printandspeak(choice['text'])
-    #         # s_functions.intotxtfile(prompt_text, choice['text'])
-    #         if choice['text'].find('?') != -1:
-    #             commander()
-    #         else:
-    #             pass
     else :
         voice_p.printandspeak("command not found")
 
@@ -183,13 +288,14 @@ def commander():
     print("----------------------------------")
 
 
+def alarm(command_user):
+    '''This is alarm function for alarm to active.'''
+    timehere = open("Alarmtext.txt","a")
+    timehere.write(command_user)
+    timehere.close()
+    os.startfile("alarm.py")
+
 if __name__ == "__main__":
     voice_p.wishMe()
     while True:
-        # if 1:
-        # loki_listen = voice_p.take_command_start().lower()
-        # if "loki" in loki_listen:
-        #     voice_p.speak("Yes")
         commander()
-        # else:
-        #     pass
