@@ -1,0 +1,59 @@
+{% extends 'base.html'%}
+
+{% block head %}
+<title>Gemini Chat</title>
+<meta charset="UTF-8">
+<title>Gemini Chat</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css'>
+<link rel="stylesheet" href="./style.css">
+{% endblock %}
+
+
+{% block body %}
+<div class="center">
+    <div class="chat">
+        <div class="contact bar">
+            <div class="pic stark"></div>
+            <div class="name">
+                Gemini Chat
+            </div>
+        </div>
+        <div class="messages" id="chat">
+            <div class="time">
+                Status: Active
+            </div>
+
+            {% if output %}
+            {% for key, value in output.items() %}
+
+            <div class="message parker">
+                {{ key }}
+            </div>
+            <div class="message stark">
+                {{ value }}
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="message stark">
+                Enter what do you want to ask?
+            </div>
+            {% endif %}
+        </div>
+
+        <form action="/" class="form" method="POST">
+            <div class="input">
+                <input placeholder="Type your message here!" type="text" id="ask" name="ask">
+                <button type="submit" class="fas fa-share"></button>
+
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- partial -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+<script src="./script.js"></script>
+
+{% endblock %}

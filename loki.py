@@ -1,5 +1,6 @@
 import re
 import s_functions as sf
+from flask import Flask, render_template, request, redirect, session
 import voice_work
 import webbrowser
 import os
@@ -296,6 +297,18 @@ def alarm(command_user):
     os.startfile("alarm.py")
 
 if __name__ == "__main__":
+    app = Flask(__name__)
+    app.secret_key = "433e732fe46eb93bed8f0392"
+    @app.route('/', methods=['GET', 'POST'])
+    def main():
+        if request.method == 'POST':
+            task_content = request.form['ask']
+            try:
+                return redirect('/')
+            except:
+                return 'There was an issue connecting to Gemini.'
+        else:
+            return render_template('index.html')
     voice_p.wishMe()
     while True:
         commander()
