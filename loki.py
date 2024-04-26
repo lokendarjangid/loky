@@ -57,24 +57,9 @@ def commands(command_user):
 
     elif "close" in command_user:
         closeappweb(command_user)   
-
-    # search commands
-    elif "google" in command_user:
-        sf.searchGoogle(command_user)
-        
-    elif "youtube" in command_user:
-        sf.searchYoutube(command_user)
         
     elif "wikipedia" in command_user:
         sf.searchWikipedia(command_user)
-
-    # set alarm 
-    elif "set an alarm" in command_user:
-        print("input time example:- 10 and 10 and 10")
-        voice_p.speak("Set the time")
-        a = input("Please tell the time :- ")
-        alarm(a)
-        voice_p.speak("Done,sir")
 
     # play,pause,mute,volume increase and decrease youtube
     elif "pause" in command_user:
