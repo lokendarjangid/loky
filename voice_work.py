@@ -13,7 +13,7 @@ class voice:
             raise Exception("Unsupported platform")
         voices = self.engine.getProperty('voices')
         # print(voices[3].id)
-        self.engine.setProperty('voice', voices[0].id)
+        self.engine.setProperty('voice', voices[1].id)
 
     def speak(self,audio):
         self.engine.say(audio)
@@ -34,7 +34,7 @@ class voice:
         else:
             self.speak("Good Evening!")
 
-        self.speak("I am Loki Sir. Please tell me how may I help you")
+        self.speak("I am shawna Sir. Please tell me how may I help you")
 
     def takeCommand(self):
     # It takes microphone input from the user and returns string output
